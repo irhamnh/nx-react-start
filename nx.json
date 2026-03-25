@@ -18,9 +18,7 @@
     {
       "plugin": "@nx/js/typescript",
       "options": {
-        "typecheck": {
-          "targetName": "typecheck"
-        },
+        "typecheck": { "targetName": "typecheck" },
         "build": {
           "targetName": "build",
           "configName": "tsconfig.lib.json",
@@ -41,12 +39,7 @@
         "typecheckTargetName": "typecheck"
       }
     },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    },
+    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } },
     {
       "plugin": "@nx/vite/plugin",
       "options": {
@@ -62,10 +55,7 @@
     },
     {
       "plugin": "@nx/playwright/plugin",
-      "options": {
-        "targetName": "e2e",
-        "ciTargetName": "e2e-ci"
-      }
+      "options": { "targetName": "e2e", "ciTargetName": "e2e-ci" }
     },
     {
       "plugin": "@nx/js/typescript",
@@ -76,12 +66,7 @@
         }
       }
     },
-    {
-      "plugin": "@nx/vitest",
-      "options": {
-        "testTargetName": "test"
-      }
-    }
+    { "plugin": "@nx/vitest", "options": { "testTargetName": "test" } }
   ],
   "targetDefaults": {
     "test": {
@@ -106,9 +91,7 @@
         "linter": "eslint",
         "bundler": "vite"
       },
-      "component": {
-        "style": "css"
-      },
+      "component": { "style": "css" },
       "library": {
         "style": "css",
         "linter": "eslint",
@@ -116,5 +99,6 @@
       }
     }
   },
-  "analytics": false
+  "analytics": false,
+  "nxCloudId": "69c43e1e5e4db82a2f73ef86"
 }
