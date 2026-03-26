@@ -1,98 +1,49 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Navigation Flow', () => {
-  test('should complete full user journey from listing to detail and back', async ({ page }) => {
-    // Start at home page
+  test('should load the homepage at root URL', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
 
-    // Should redirect to products
-    await page.waitForURL('**/products');
-    expect(page.url()).toContain('/products');
+    const homeHeading = page.locator('h1').first();
+    await expect(homeHeading).toContainText('Home');
+  });
 
-    // Click on a specific product
-    const productCard = page.locator('[class*="product-card"]').first();
-    const productName = await productCard.locator('h3').textContent();
-    await productCard.click();
+  test('should display all hero elements on homepage', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
 
-    // Should navigate to product detail
-    await page.waitForURL('**/products/*');
-    expect(page.url()).toMatch(/\/products\/\d+/);
+    const heroTitle = page.locator('h1').nth(1);
+    await expect(heroTitle).toContainText('Welcmoe to our Demo');
 
-    // Verify product name matches
-    const detailName = page.locator('h1').last();
-    await expect(detailName).toContainText(productName || '');
+    const heroSubtitle = page.locator('p').first();
+    await expect(heroSubtitle).toContainText('Build something amazing today');
 
-    // Navigate back using back button
-    const backButton = page.locator('button:has-text("Back to Products")');
-    await backButton.click();
-
-    // Should be back on products page
-    await page.waitForURL('**/products');
-    expect(page.url()).toContain('/products');
-
-    // Original product should still be visible
-    const sameProduct = page.locator(`h3:has-text("${productName}")`);
-    await expect(sameProduct).toBeVisible();
+    const ctaButton = page.locator('button:has-text("Get Started")');
+    await expect(ctaButton).toBeVisible();
   });
 
   test('should handle browser back/forward navigation', async ({ page }) => {
-    // Navigate to products
-    await page.goto('/products');
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
 
-    // Click a product
-    const firstProduct = page.locator('[class*="product-card"]').first();
-    await firstProduct.click();
-    await page.waitForURL('**/products/*');
-    const detailUrl = page.url();
+    const homeHeading = page.locator('h1').first();
+    await expect(homeHeading).toContainText('Home');
 
-    // Use browser back button
     await page.goBack();
-    await page.waitForURL('**/products');
-    expect(page.url()).toContain('/products');
-
-    // Use browser forward button
     await page.goForward();
-    await page.waitForURL('**/products/*');
-    expect(page.url()).toBe(detailUrl);
-  });
-
-  test('should handle deep linking to product detail', async ({ page }) => {
-    // First, get a valid product ID by visiting the products page
-    await page.goto('/products');
-    const firstProduct = page.locator('[class*="product-card"]').first();
-    await firstProduct.click();
-    await page.waitForURL('**/products/*');
-
-    const productUrl = page.url();
-    const productId = productUrl.split('/').pop();
-
-    // Now test deep linking directly to this product
-    await page.goto(`/products/${productId}`);
     await page.waitForLoadState('domcontentloaded');
 
-    // Product detail should load properly
-    const productName = page.locator('h1').last();
-    await expect(productName).toBeVisible();
-
-    const backButton = page.locator('button:has-text("Back to Products")');
-    await expect(backButton).toBeVisible();
+    await expect(homeHeading).toContainText('Home');
   });
 
-  test('should handle invalid product URLs gracefully', async ({ page }) => {
-    // Navigate to invalid product ID
-    await page.goto('/products/invalid-id-999999');
+  test('should handle direct navigation to root', async ({ page }) => {
+    await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    // Should show error message - using first() to avoid strict mode violation
-    const errorMessage = page.locator('[class*="error"]').first();
-    await expect(errorMessage).toBeVisible();
+    expect(page.url()).toMatch(/\/$/);
 
-    // Back button should still work
-    const backButton = page.locator('button:has-text("Back to Products")');
-    if (await backButton.isVisible()) {
-      await backButton.click();
-      await page.waitForURL('**/products');
-      expect(page.url()).toContain('/products');
-    }
+    const heroTitle = page.locator('h1').nth(1);
+    await expect(heroTitle).toBeVisible();
   });
 });

@@ -1,4 +1,3 @@
-import { Route, Routes } from 'react-router-dom';
 // importing the component from the library
 import { Hero } from '@org/ui';
 
