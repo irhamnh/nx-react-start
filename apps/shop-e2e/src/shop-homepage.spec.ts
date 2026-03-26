@@ -5,26 +5,22 @@ test.describe('Shop Homepage', () => {
     await page.goto('/');
   });
 
-  test('should display the main header', async ({ page }) => {
+  test('should display the home heading', async ({ page }) => {
     const header = page.locator('h1').first();
-    await expect(header).toContainText('Nx Shop Demo');
+    await expect(header).toContainText('Home');
   });
 
-  test('should redirect to products page by default', async ({ page }) => {
-    await page.waitForURL('**/products');
-    expect(page.url()).toContain('/products');
-
-    const productsHeading = page.locator('h1:has-text("Our Products")');
-    await expect(productsHeading).toBeVisible();
+  test('should display the hero section', async ({ page }) => {
+    const heroTitle = page.locator('h1').nth(1);
+    await expect(heroTitle).toContainText('Welcmoe to our Demo');
   });
 
   test('should have proper page title', async ({ page }) => {
     await expect(page).toHaveTitle(/shop/i);
   });
 
-  test('should display the tagline', async ({ page }) => {
-    await page.waitForSelector('text=/Explore our wide selection/i');
-    const tagline = page.locator('p:has-text("Explore our wide selection")');
-    await expect(tagline).toBeVisible();
+  test('should display the hero subtitle', async ({ page }) => {
+    const subtitle = page.locator('p').first();
+    await expect(subtitle).toContainText('Build something amazing today');
   });
 });
